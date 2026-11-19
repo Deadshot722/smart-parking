@@ -1,0 +1,1346 @@
+{
+  "info": {
+    "name": "Smart-Parking API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3001"
+    },
+    {
+      "key": "conductorToken",
+      "value": ""
+    },
+    {
+      "key": "operadorToken",
+      "value": ""
+    },
+    {
+      "key": "folio",
+      "value": ""
+    },
+    {
+      "key": "idEst",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Prueba de vida",
+      "item": [
+        {
+          "name": "GET /",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 200\", function () { pm.response.to.have.status(200); });",
+                  ""
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                ""
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Autenticación",
+      "item": [
+        {
+          "name": "Registro correcto (201)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 201\", function () { pm.response.to.have.status(201); });",
+                  ""
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/registro",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "registro"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Ana María López\",\n  \"correo\": \"ana{{$timestamp}}@correo.com\",\n  \"contrasena\": \"Segura2026\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Registro nombre con números (400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 400\", function () { pm.response.to.have.status(400); });",
+                  ""
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/registro",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "registro"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Ana123\",\n  \"correo\": \"ana2@correo.com\",\n  \"contrasena\": \"Segura2026\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Registro correo repetido (409)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 409\", function () { pm.response.to.have.status(409); });",
+                  ""
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/registro",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "registro"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Conductor Demo\",\n  \"correo\": \"conductor@smartparking.mx\",\n  \"contrasena\": \"Segura2026\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Login conductor (200)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.collectionVariables.set(\"conductorToken\", pm.response.json().token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"correo\": \"conductor@smartparking.mx\",\n  \"contrasena\": \"Segura2026\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Login operador (200)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.collectionVariables.set(\"operadorToken\", pm.response.json().token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"correo\": \"operador@smartparking.mx\",\n  \"contrasena\": \"Segura2026\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Login incorrecto (401)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 401\", function () { pm.response.to.have.status(401); });",
+                  ""
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"correo\": \"conductor@smartparking.mx\",\n  \"contrasena\": \"mala\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Quién soy (200)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 200\", function () { pm.response.to.have.status(200); });",
+                  ""
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{conductorToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/yo",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "yo"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Consulta pública",
+      "item": [
+        {
+          "name": "GET /api/aforo",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 200\", function () { pm.response.to.have.status(200); });",
+                  ""
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/aforo",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "aforo"
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET /api/estacionamientos",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 200\", function () { pm.response.to.have.status(200); });",
+                  ""
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/estacionamientos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "estacionamientos"
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET /api/estacionamientos/1",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 200\", function () { pm.response.to.have.status(200); });",
+                  ""
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/estacionamientos/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "estacionamientos",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET /api/estacionamientos/999 (404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 404\", function () { pm.response.to.have.status(404); });",
+                  ""
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/estacionamientos/999",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "estacionamientos",
+                "999"
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET /api/niveles/1/cajones",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 200\", function () { pm.response.to.have.status(200); });",
+                  ""
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/niveles/1/cajones",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "niveles",
+                "1",
+                "cajones"
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET /api/tarifas",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 200\", function () { pm.response.to.have.status(200); });",
+                  ""
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/tarifas",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "tarifas"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Kiosco y conductor",
+      "item": [
+        {
+          "name": "POST /api/boletos/entrada (201)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 201\", function () { pm.response.to.have.status(201); });",
+                  "pm.collectionVariables.set(\"folio\", pm.response.json().folio);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/boletos/entrada",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "boletos",
+                "entrada"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id_estacionamiento\": 1\n}"
+            }
+          }
+        },
+        {
+          "name": "Vincular folio (200)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 200\", function () { pm.response.to.have.status(200); });",
+                  ""
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{conductorToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/boletos/vincular",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "boletos",
+                "vincular"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"folio\": \"{{folio}}\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Boleto actual (200)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 200\", function () { pm.response.to.have.status(200); });",
+                  ""
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{conductorToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/boletos/actual",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "boletos",
+                "actual"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Ubicar en cajón (200)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 200\", function () { pm.response.to.have.status(200); });",
+                  ""
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{conductorToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/boletos/ubicacion",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "boletos",
+                "ubicacion"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id_nivel\": 1,\n  \"id_cajon\": 5\n}"
+            }
+          }
+        },
+        {
+          "name": "Liberar cajón (200)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 200\", function () { pm.response.to.have.status(200); });",
+                  ""
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{conductorToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/boletos/ubicacion",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "boletos",
+                "ubicacion"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Pagar tarjeta inválida (400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 400\", function () { pm.response.to.have.status(400); });",
+                  ""
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{conductorToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/boletos/pagar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "boletos",
+                "pagar"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"numero_tarjeta\": \"123\",\n  \"vencimiento\": \"12/30\",\n  \"cvv\": \"123\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Pagar (201)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 201\", function () { pm.response.to.have.status(201); });",
+                  ""
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{conductorToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/boletos/pagar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "boletos",
+                "pagar"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"numero_tarjeta\": \"4111111111111111\",\n  \"vencimiento\": \"12/30\",\n  \"cvv\": \"123\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Comprobante (200)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 200\", function () { pm.response.to.have.status(200); });",
+                  ""
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{conductorToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/boletos/comprobante",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "boletos",
+                "comprobante"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Historial (200)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 200\", function () { pm.response.to.have.status(200); });",
+                  ""
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{conductorToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/boletos/historial",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "boletos",
+                "historial"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Sin sesión (401)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 401\", function () { pm.response.to.have.status(401); });",
+                  ""
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/boletos/actual",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "boletos",
+                "actual"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Operador",
+      "item": [
+        {
+          "name": "Conductor no puede (403)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 403\", function () { pm.response.to.have.status(403); });",
+                  ""
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{conductorToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/caseta/recientes",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "caseta",
+                "recientes"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Boletos recientes (200)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 200\", function () { pm.response.to.have.status(200); });",
+                  ""
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{operadorToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/caseta/recientes",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "caseta",
+                "recientes"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Consultar folio (200)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 200\", function () { pm.response.to.have.status(200); });",
+                  ""
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{operadorToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/caseta/boleto/{{folio}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "caseta",
+                "boleto",
+                "{{folio}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Registrar salida (200)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 200\", function () { pm.response.to.have.status(200); });",
+                  ""
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{operadorToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/caseta/salida",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "caseta",
+                "salida"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"folio\": \"{{folio}}\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Salida repetida (409)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 409\", function () { pm.response.to.have.status(409); });",
+                  ""
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{operadorToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/caseta/salida",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "caseta",
+                "salida"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"folio\": \"{{folio}}\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Crear estacionamiento (201)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 201\", function () { pm.response.to.have.status(201); });",
+                  "pm.collectionVariables.set(\"idEst\", pm.response.json().id_estacionamiento);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{operadorToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/estacionamientos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "estacionamientos"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Plaza Norte\",\n  \"direccion\": \"Calle 1 #20\",\n  \"horario\": \"08:00 - 22:00\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Crear nivel (201)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 201\", function () { pm.response.to.have.status(201); });",
+                  ""
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{operadorToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/estacionamientos/{{idEst}}/niveles",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "estacionamientos",
+                "{{idEst}}",
+                "niveles"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Sótano 1\",\n  \"sectores\": 2,\n  \"cajones_por_sector\": 5\n}"
+            }
+          }
+        },
+        {
+          "name": "Crear tarifa (201)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 201\", function () { pm.response.to.have.status(201); });",
+                  ""
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{operadorToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/tarifas",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "tarifas"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id_estacionamiento\": \"{{idEst}}\",\n  \"costo\": 25,\n  \"horario\": \"Por hora\",\n  \"minutos_tolerancia\": 10\n}"
+            }
+          }
+        },
+        {
+          "name": "Cambiar estado de cajón (200)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 200\", function () { pm.response.to.have.status(200); });",
+                  ""
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{operadorToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/cajones/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "cajones",
+                "1"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"estado\": \"Ocupado\"\n}"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

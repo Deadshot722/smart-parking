@@ -1,0 +1,18 @@
+{
+  "expo": {
+    "name": "Smart-Parking",
+    "slug": "smart-parking",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "backgroundColor": "#280b0f",
+    "android": {
+      "package": "mx.smartparking.app",
+      "versionCode": 1,
+      "backgroundColor": "#280b0f"
+    },
+    "plugins": [
+      ["expo-build-properties", { "android": { "usesCleartextTraffic": true } }]
+    ]
+  }
+}

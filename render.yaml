@@ -1,0 +1,16 @@
+# Blueprint opcional de Render: "New + -> Blueprint" y elige tu repositorio.
+# Si prefieres hacerlo a mano, sigue DESPLIEGUE.md (paso 3).
+services:
+  - type: web
+    name: smart-parking-api
+    runtime: node
+    plan: free
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /
+    envVars:
+      - key: DATABASE_URL
+        sync: false   # Render te pedirá pegar aquí la URI del Session pooler de Supabase
+      - key: NODE_VERSION
+        value: "20"
