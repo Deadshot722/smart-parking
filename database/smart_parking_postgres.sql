@@ -1,17 +1,3 @@
--- ============================================================
--- Smart-Parking  (PostgreSQL / Supabase)
--- Integrantes: Arroyo Millán Sofía, Muñoz Gutiérrez Diego,
---              Neri Ortiz Dylan Damián, Vacio Pérez Andrea
---
--- Cómo usarlo en Supabase: SQL Editor -> New query -> pegar TODO este archivo -> Run.
--- Se puede ejecutar varias veces: borra y vuelve a crear las tablas (¡borra los datos!).
--- Cambios respecto al script original de MySQL:
---   * AUTO_INCREMENT -> GENERATED ALWAYS AS IDENTITY
---   * DATETIME -> TIMESTAMPTZ (guarda la zona horaria; la web/app muestran la hora local del dispositivo)
---   * sesion.token (CHAR 64) agregado para el inicio de sesión
---   * RLS activado en todas las tablas (ver al final)
--- ============================================================
-
 DROP TABLE IF EXISTS comprobante, pago, estancia, boleto, tarifa, cajon, nivel,
                      operador_estacionamiento, estacionamiento, sesion, usuario CASCADE;
 

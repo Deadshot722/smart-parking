@@ -1,6 +1,6 @@
 # Actividad
 ## Nombre de la empresa:
-## Create Your Life
+## Create Your Future
 ## Nombre del proyecto:
 ## SMART-PARING
 ## Integrantes:
