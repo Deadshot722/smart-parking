@@ -1,0 +1,245 @@
+/* Tema Smart-Parking: paleta Back in Black, Mountain Heather, Decanting, Funkie Friday y Moonscape (tema claro).
+   Uso de cada color:
+   - Mountain Heather #F0D9E4  fondo de la página y texto sobre fondos oscuros
+   - Back in Black    #16131F  menú, títulos, texto principal y botones
+   - Funkie Friday    #4A3F4B  texto secundario, encabezados de tablas y botones al pasar el mouse
+   - Moonscape        #806C79  accesos rápidos, bordes de campos y líneas de acento
+   - Decanting        #C1A0AC  bordes de tarjetas, opción elegida y líneas divisorias
+   Colores de apoyo:
+   - #FBF4F7 (un Mountain Heather más claro) para tarjetas, paneles, tablas y campos: sobre Decanting el texto pequeño no se lee bien
+   - verde #3B5E3A = libre / correcto y rojo #9A2F3A = ocupado / error (tonos apagados para que combinen) */
+:root {
+    /* Paleta */
+    --back-in-black: #16131F;
+    --mountain-heather: #F0D9E4;
+    --decanting: #C1A0AC;
+    --funkie-friday: #4A3F4B;
+    --moonscape: #806C79;
+
+    /* Funciones */
+    --fondo: var(--mountain-heather);
+    --superficie: #FBF4F7;            /* tarjetas, paneles y números */
+    --superficie-clara: #FBF4F7;      /* filas de tablas y campos */
+    --texto: var(--back-in-black);
+    --texto-suave: var(--funkie-friday);
+    --texto-claro: var(--mountain-heather);
+    --primario: var(--back-in-black);
+    --primario-hover: var(--funkie-friday);
+    --acento: var(--moonscape);
+    --encabezado: var(--funkie-friday);
+    --borde: var(--decanting);
+    --borde-campo: var(--moonscape);
+
+    /* Estados */
+    --ok: #3B5E3A;
+    --ok-fondo: #DCE8D6;
+    --ok-texto: #2F4F2E;
+    --mal: #9A2F3A;
+    --mal-fondo: #F3CFD3;
+    --mal-texto: #7E2431;
+    --peligro: #9A2F3A;
+    --peligro-hover: #7E2431;
+
+    --sombra: 0 2px 6px -1px rgba(22, 19, 31, 0.12), 0 1px 3px -1px rgba(22, 19, 31, 0.08);
+    --sombra-alta: 0 10px 24px -6px rgba(22, 19, 31, 0.22);
+    --radius: 12px;
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: var(--fondo);
+    color: var(--texto);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+#__next { display: flex; flex-direction: column; min-height: 100vh; }
+
+/* ---------- Menú ---------- */
+nav {
+    display: flex; flex-wrap: wrap; gap: 14px; align-items: center;
+    padding: 14px 24px;
+    background: var(--primario);
+    border-bottom: 4px solid var(--acento);
+}
+nav a { color: var(--fondo); font-size: 15px; text-decoration: none; transition: var(--transition); }
+nav a:hover { color: var(--decanting); text-decoration: underline; }
+nav .marca { color: var(--fondo); margin-right: 8px; letter-spacing: -0.02em; }
+nav .derecha { margin-left: auto; }
+nav button { margin-left: auto; }
+
+/* ---------- Contenido ---------- */
+main { width: 100%; max-width: 1000px; margin: 0 auto; padding: 32px 20px; flex: 1; }
+h1 { font-size: 2.2rem; font-weight: 800; letter-spacing: -0.025em; margin-bottom: 0.6rem; color: var(--primario); }
+h2 { font-size: 1.5rem; margin: 1.4rem 0 0.75rem; color: var(--primario); }
+h3, h4 { color: var(--primario); }
+main > p, main > label, p.pie { color: var(--texto-suave); }
+main > p { margin-bottom: 0.9rem; }
+main a { color: var(--primario); }
+main a:hover { color: var(--texto); }
+ul { padding-left: 20px; color: var(--texto-suave); line-height: 1.7; }
+
+/* ---------- Formularios ---------- */
+.formulario { display: flex; flex-direction: column; gap: 12px; max-width: 400px; margin-bottom: 24px; }
+.formulario label, .fila label, main > label { font-size: 14px; color: var(--texto-suave); display: flex; flex-direction: column; gap: 4px; }
+main > label { flex-direction: row; align-items: center; gap: 8px; margin-bottom: 12px; }
+.fila { display: flex; gap: 10px; flex-wrap: wrap; align-items: end; }
+
+input, select {
+    padding: 10px 12px; border: 1px solid var(--borde-campo); border-radius: calc(var(--radius) - 4px);
+    font-size: 15px; background: var(--superficie-clara); color: var(--primario);
+}
+input::placeholder { color: var(--texto-suave); }
+input:disabled { background: var(--fondo); color: var(--texto-suave); border-color: var(--borde); }
+input:focus, select:focus, button:focus-visible, a:focus-visible { outline: 3px solid var(--primario); outline-offset: 1px; }
+
+/* ---------- Botones (.btn del css original) ---------- */
+button, .btn {
+    background-color: var(--primario); color: var(--fondo);
+    border: 1px solid var(--primario);
+    padding: 0.7rem 1.4rem; font-size: 0.95rem; font-weight: 600;
+    border-radius: calc(var(--radius) - 4px); cursor: pointer; transition: var(--transition);
+}
+button:hover, .btn:hover { background-color: var(--primario-hover); border-color: var(--primario-hover); transform: translateY(-2px); }
+button:active, .btn:active { transform: translateY(0); }
+button.secundario { background: transparent; color: var(--primario); border-color: var(--acento); }
+button.secundario:hover { background: rgba(128, 108, 121, 0.15); }
+button.peligro { background: var(--peligro); border-color: var(--peligro); color: var(--fondo); }
+button.peligro:hover { background: var(--peligro-hover); }
+button:disabled { cursor: not-allowed; opacity: 0.45; transform: none; }
+nav button { padding: 5px 12px; background: transparent; color: var(--fondo); border-color: rgba(240, 217, 228, 0.55); }
+nav button:hover { background: rgba(240, 217, 228, 0.12); }
+
+/* ---------- Mensajes ---------- */
+.error { color: var(--mal); font-weight: 600; }
+.exito { color: var(--ok); font-weight: 600; }
+.aviso { background: var(--superficie-clara); color: var(--texto); border: 1px solid var(--borde); border-left: 4px solid var(--acento); border-radius: var(--radius); padding: 10px 14px; margin: 10px 0; }
+.aviso strong { color: var(--texto); }
+.card-error { color: var(--mal); }
+
+/* ---------- Tarjetas (.caja / .tarjeta del css original) ---------- */
+.panel, .caja, .tarjeta, .numero {
+    background: var(--superficie); color: var(--texto);
+    border: 1px solid var(--borde); border-radius: var(--radius);
+    box-shadow: var(--sombra);
+}
+.panel, .caja { padding: 1.5rem; margin-bottom: 20px; }
+.rejilla, .tarjetas-contenedor { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.2rem; }
+.tarjeta { padding: 1.2rem 1.4rem; transition: var(--transition); }
+.tarjeta:hover { border-color: var(--acento); box-shadow: var(--sombra-alta); }
+.tarjeta h3 { margin: 0 0 6px; }
+:where(.tarjeta, .panel) p { color: var(--texto); margin-bottom: 6px; }
+.tarjeta.elegida { border-color: var(--primario); box-shadow: 0 0 0 2px var(--primario); background: var(--fondo); }
+.sectores { margin: 8px 0 0; padding-left: 18px; color: var(--texto-suave); font-size: 14px; }
+.etiqueta-lleno { color: var(--mal-texto) !important; background: var(--mal-fondo); display: inline-block; padding: 2px 8px; border-radius: 6px; font-weight: 700; margin: 6px 0 0; }
+
+.libre { color: var(--ok); font-weight: 700; }
+.ocupado { color: var(--mal); font-weight: 700; }
+main > p .libre, main > p .ocupado { font-weight: 700; }
+
+.barra { height: 10px; background: var(--ok-fondo); border-radius: 6px; overflow: hidden; border: 1px solid rgba(59, 94, 58, 0.3); }
+.barra-ocupado { height: 100%; background: #A8414C; transition: width 0.4s; }
+
+.numeros { display: flex; gap: 16px; flex-wrap: wrap; margin: 16px 0; }
+.numero { flex: 1; min-width: 150px; text-align: center; padding: 18px; border-top: 4px solid var(--acento); color: var(--texto-suave); }
+.numero strong { display: block; font-size: 42px; color: var(--primario); }
+.numero.verde strong { color: var(--ok); }
+.numero.roja strong { color: var(--mal); }
+
+/* ---------- Cajones ---------- */
+.cajones { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+.cajon { min-width: 52px; padding: 8px 6px; font-size: 13px; }
+.cajon-libre { background: var(--ok-fondo); color: var(--ok-texto); border-color: var(--ok); }
+.cajon-libre:hover { background: #CBDDC3; }
+.cajon-ocupado { background: var(--mal-fondo); color: var(--mal-texto); border-color: var(--mal); }
+.cajon-ocupado:hover { background: var(--mal-fondo); transform: none; }
+/* Los cajones solo de consulta (deshabilitados) conservan su color */
+.cajon:disabled { opacity: 1; cursor: default; }
+.cajon-libre:disabled { background: var(--ok-fondo); color: var(--ok-texto); border-color: var(--ok); }
+.cajon-ocupado:disabled { background: var(--mal-fondo); color: var(--mal-texto); border-color: var(--mal); }
+.cajon-elegido { outline: 3px solid var(--primario); outline-offset: 2px; }
+
+/* ---------- Boleto, menús y tablas ---------- */
+.boleto { font-size: 18px; line-height: 1.7; }
+.folio-grande { font-size: 48px; font-weight: 800; letter-spacing: 4px; color: var(--primario); }
+.acciones { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+.menu-grande { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1.2rem; }
+/* Accesos rápidos en Moonscape: texto claro, grande y en negritas para que se lea bien */
+.menu-grande a {
+    display: block; background: var(--acento); border: 1px solid var(--acento); border-radius: var(--radius);
+    padding: 22px; text-decoration: none; color: var(--superficie-clara); font-size: 1.2rem; font-weight: 700;
+    text-align: center; transition: var(--transition); box-shadow: var(--sombra);
+}
+.menu-grande a:hover { background: var(--primario); border-color: var(--primario); color: var(--texto-claro); transform: translateY(-2px); box-shadow: var(--sombra-alta); }
+.pie { font-size: 13px; }
+
+.tabla-scroll { overflow-x: auto; border-radius: var(--radius); border: 1px solid var(--borde); box-shadow: var(--sombra); }
+table { width: 100%; border-collapse: collapse; background: var(--superficie-clara); color: var(--texto); }
+th, td { padding: 10px; border: 1px solid var(--borde); text-align: left; }
+th { background: var(--encabezado); color: var(--texto-claro); border-color: var(--encabezado); }
+tbody tr:hover { background: rgba(193, 160, 172, 0.2); }
+
+/* ---------- Pie de página (footer del css original) ---------- */
+footer {
+    text-align: center; margin-top: 3rem; padding: 1.5rem 1rem;
+    color: var(--texto-suave); font-size: 0.875rem; border-top: 1px solid var(--borde);
+}
+
+/* ---------- Registro: tipo de cuenta, ayudas ---------- */
+.opciones-rol { border: none; display: flex; flex-direction: column; gap: 8px; }
+.opciones-rol legend { font-size: 14px; color: var(--texto-suave); margin-bottom: 6px; }
+.opciones-rol label {
+    flex-direction: row !important; align-items: center; gap: 10px !important; cursor: pointer;
+    border: 1px solid var(--borde-campo); border-radius: calc(var(--radius) - 4px); padding: 10px 12px; background: var(--superficie-clara);
+}
+.opciones-rol label.elegido { background: var(--decanting); border-color: var(--primario); }
+.opciones-rol span { display: flex; flex-direction: column; color: var(--primario); }
+.opciones-rol small { color: var(--texto-suave); font-size: 12px; }
+.opciones-rol label.elegido small { color: var(--primario); }
+.ayuda { font-size: 12px; color: var(--texto-suave); }
+.casilla { flex-direction: row !important; align-items: center; gap: 8px !important; }
+a.btn { display: inline-block; text-decoration: none; color: var(--fondo); }
+
+/* ---------- GitHub (se conservan los colores de la marca) ---------- */
+.separador { display: flex; align-items: center; gap: 10px; max-width: 400px; margin: 18px 0; color: var(--texto-suave); font-size: 13px; }
+.separador::before, .separador::after { content: ''; flex: 1; height: 1px; background: var(--borde); }
+a.btn-github { display: inline-flex; align-items: center; justify-content: center; gap: 10px; width: 100%; max-width: 400px; padding: 10px 16px; border-radius: calc(var(--radius) - 4px); font-weight: 600; text-decoration: none; min-height: 44px; margin-bottom: 12px; background: #1f2328; color: #fff; border: 1px solid #1f2328; }
+a.btn-github:hover { background: #32383f; color: #fff; }
+
+/* ---------- Consulta de boletos ---------- */
+.encabezado-tabla { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+.encabezado-tabla h2 { margin: 0; }
+.paginas { justify-content: center; align-items: center; margin-top: 14px; }
+
+/* ---------- Estados de boleto (Activo / Pagado / Finalizado) ---------- */
+.estado {
+    display: inline-flex; flex-direction: column; gap: 1px;
+    padding: 3px 10px; border-radius: 999px; font-size: 13px; font-weight: 600; line-height: 1.25;
+    border: 1px solid var(--acento); background: var(--superficie-clara);
+}
+.estado small { font-size: 11px; font-weight: 400; }
+.estado-activo { color: var(--mal-texto); border-color: var(--mal); background: var(--mal-fondo); }
+.estado-pagado { color: var(--ok-texto); border-color: var(--ok); background: var(--ok-fondo); }
+.estado-finalizado { color: var(--texto-suave); }
+.leyenda-estados { font-size: 13px; color: var(--texto-suave); margin: 4px 0 10px; line-height: 1.6; }
+
+/* ---------- Pago ---------- */
+.marca-tarjeta {
+    display: inline-block; margin-left: 6px; padding: 1px 8px; border-radius: 999px;
+    font-size: 12px; font-weight: 600; color: var(--fondo); background: var(--primario);
+}
+
+/* ---------- Caseta: confirmación del cobro ---------- */
+.confirmar-cobro {
+    margin-top: 12px; padding: 10px 12px; font-size: 15px; font-weight: 600; color: var(--texto);
+    background: var(--superficie-clara); border: 1px solid var(--acento); border-radius: calc(var(--radius) - 4px);
+    display: flex; cursor: pointer; width: fit-content;
+}
+.confirmar-cobro input { width: 18px; height: 18px; accent-color: var(--primario); }
+
+/* ---------- Inicio: descarga de la app Android ---------- */
+.app-android { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+.app-android p { margin: 0; }

@@ -1,0 +1,109 @@
+// Contrato del servicio de llamadas a procedimientos remotos (gRPC) de Smart-Parking.
+// El servidor (grpc/servidor.js) y los clientes (grpc/cliente.js, grpc/demo.js) usan este mismo archivo.
+syntax = "proto3";
+
+package smartparking;
+
+service SmartParking {
+  // Unario: aforo general y por estacionamiento (lo usa GET /api/aforo de la web)
+  rpc ConsultarAforo (SolicitudAforo) returns (Aforo);
+
+  // Unario: niveles y sectores de un estacionamiento (CU-2.1)
+  rpc ConsultarDisponibilidad (SolicitudEstacionamiento) returns (Disponibilidad);
+
+  // Unario: datos y cobro de un boleto por folio (caseta)
+  rpc ConsultarBoleto (SolicitudFolio) returns (Boleto);
+
+  // Unario: regla de cobro "por hora o fracción, mínimo 1 hora" (RF-1.5)
+  rpc CalcularCobro (SolicitudCobro) returns (Cobro);
+
+  // Streaming del servidor: envía la disponibilidad cada cierto tiempo (tiempo real, RNF-1)
+  rpc VigilarDisponibilidad (SolicitudEstacionamiento) returns (stream Disponibilidad);
+}
+
+// En todas las solicitudes, id_operador > 0 limita la consulta a los estacionamientos de ese operador
+// (si pide uno ajeno responde PERMISSION_DENIED). id_operador = 0 consulta todos (vista pública).
+message SolicitudAforo {
+  int32 id_operador = 1;
+}
+
+message EstacionamientoAforo {
+  int32 id_estacionamiento = 1;
+  string nombre = 2;
+  string direccion = 3;
+  string horario = 4;
+  int32 libres = 5;
+  int32 ocupados = 6;
+  int32 total = 7;
+}
+
+message Aforo {
+  int32 libres = 1;
+  int32 ocupados = 2;
+  int32 total = 3;
+  repeated EstacionamientoAforo estacionamientos = 4;
+  string actualizado = 5;
+}
+
+message SolicitudEstacionamiento {
+  int32 id_estacionamiento = 1;
+  int32 intervalo_ms = 2;   // solo VigilarDisponibilidad (mínimo 1000, por defecto 2000)
+  int32 repeticiones = 3;   // solo VigilarDisponibilidad (0 = hasta que el cliente cancele; máximo 300)
+  int32 id_operador = 4;
+}
+
+message Sector {
+  string sector = 1;
+  int32 libres = 2;
+  int32 ocupados = 3;
+}
+
+message Nivel {
+  int32 id_nivel = 1;
+  string nombre = 2;
+  int32 libres = 3;
+  int32 ocupados = 4;
+  int32 total = 5;
+  bool sin_disponibilidad = 6;
+  repeated Sector sectores = 7;
+}
+
+message Disponibilidad {
+  int32 id_estacionamiento = 1;
+  string nombre = 2;
+  repeated Nivel niveles = 3;
+  string actualizado = 4;
+}
+
+message SolicitudFolio {
+  string folio = 1;
+  int32 id_operador = 2;
+}
+
+message Boleto {
+  string folio = 1;
+  string estado = 2;            // Activo, Pagado o Finalizado
+  string estacionamiento = 3;
+  string entrada = 4;           // fecha ISO 8601
+  string nivel = 5;
+  string cajon = 6;
+  int32 minutos = 7;
+  double costo_hora = 8;
+  double monto_total = 9;
+  bool pagado = 10;
+  double monto_pagado = 11;
+  int32 tolerancia_restante = 12;
+  double monto_extra = 13;
+  double monto_a_cobrar = 14;
+}
+
+message SolicitudCobro {
+  int32 minutos = 1;
+  double costo_hora = 2;
+}
+
+message Cobro {
+  int32 horas_cobradas = 1;
+  double monto = 2;
+  string regla = 3;
+}
